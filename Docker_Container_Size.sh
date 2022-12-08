@@ -1,7 +1,7 @@
 #!/bin/bash
 
 echo
-docker container ls --format "table {{.ID}} {{.Image}} {{.Size}}"  | awk '{print $1,$2,$3}' | tr -s ' ' | jq -c -Rn 'input  | split(" ") as $head |inputs | split(" ") |to_entries |map(.key = $head[.key]) |[ .[:2][], { key: "DATA", value: (.[2:] | from_entries) } ] |from_entries'> size5.json
+docker container ls --format "table {{.ID}} {{.Image}} {{.Size}}"  | awk '{print $1,$2,$3}' | tr -s ' ' | jq -c -Rn 'input  | split(" ") as $head |inputs | split(" ") |to_entries |map(.key = $head[.key]) |[ .[:2][], { key: "DATA", value: (.[2:] | from_entries) } ] |from_entries'> /tmp/zabbix/size5.json
 
 
 function readFileAttributes
@@ -25,7 +25,7 @@ import os
 
 
 ans=[]
-with open('/home/ubuntu/size5.json', 'r') as f:
+with open('/tmp/zabbix/size5.json', 'r') as f:
         states_list = [line.strip() for line in f.readlines()]
 
         #print(states_list)
