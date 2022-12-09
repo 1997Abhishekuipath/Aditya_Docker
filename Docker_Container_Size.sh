@@ -40,7 +40,21 @@ with open('/tmp/zabbix/size5.json', 'r') as f:
                 #print(sss)
                 id=sss["CONTAINER"]
                 name=sss["ID"]
-                size=sss["DATA"]["IMAGE"]
+                sizes=sss["DATA"]["IMAGE"]
+                s=sizes
+                a=len(s)
+                #print(s[a-2]+s[a-1])
+                p=s[a-2]+s[a-1]
+                #print(p)
+                v=0
+                if p=='MB':
+                   v=0
+                else:
+                   v=1
+                #print(v)
+
+                #print(sizes)
+                size= float(sizes.rstrip("MB"))
                 #print(id,name,size)
                 #aditya=[]
                 #for aditya in sss:
@@ -50,7 +64,7 @@ with open('/tmp/zabbix/size5.json', 'r') as f:
                 #epsg_json = json.loads(sss.replace("\'", '"'))  //remove backlash
                 #print(ss)
 
-                ans.append({"{#CONTAINERID}":id,"{#NAME}":name,"{#SIZE}":size})
+                ans.append({"{#CONTAINERID}":id,"{#NAME}":name,"{#SIZE}":size,"{#SIZEUNIT}":p})
 
         ansYES={"data":ans}
         #print(ansYES)
@@ -62,5 +76,6 @@ HERE
 }
 fileAttr=$(readFileAttributes)
 echo "$fileAttr"
+# Aditya_docker
 # Aditya_docker
 # Aditya_docker
