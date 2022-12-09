@@ -23,11 +23,14 @@ with open('/tmp/zabbix/stats.txt', 'r') as f:
 		statsusage=json.loads(stat)
 		#print(statsusage)
 		id=statsusage["ID"]
-		cpuper=statsusage["CPUPerc"]
-		memper=statsusage["MemPerc"]
-		#print(id,cpuper,memper)
+		name=statsusage["Name"]
+		cpu=statsusage["CPUPerc"]
+		cpuper = float(cpu.replace("%",""))
+		mem=statsusage["MemPerc"]
+		memper = float(mem.replace("%",""))
+		#print(id,type(cpuper),memper)
 
-		ans.append({"{#CONTAINERID}":id,"{#CPUPERCENTAGE}":cpuper,"{#MEMORYPERCENTAGE}":memper})
+		ans.append({"{#CONTAINERID}":id,"{#CONTAINERNAME}":name,"{#CPUPERCENTAGE}":cpuper,"{#MEMORYPERCENTAGE}":memper})
 	
 	ansYES={"data":ans}
 	#print(ansYES)
@@ -39,4 +42,5 @@ HERE
 }
 fileAttr=$(readFileAttributes)
 echo "$fileAttr"
+# Aditya_docker
 # Aditya_docker
