@@ -1,7 +1,7 @@
 #!/bin/bash
 
 echo
-docker ps  --format "table {{.ID}} {{.Image}} {{.Size}}"  | awk '{print $1,$2}' | tr -s ' ' | jq -c -Rn 'input  | split(" ") as $head |inputs | split(" ") |to_entries |map(.key = $head[.key]) |[ .[:2][], { key: "DATA", value: (.[2:] | from_entries) } ] |from_entries'> /tmp/zabbix/logs.json
+docker ps  --format "table {{.ID}} {{.Image}} {{.Names}}"  | awk '{print $1,$3}' | tr -s ' ' | jq -c -Rn 'input  | split(" ") as $head |inputs | split(" ") |to_entries |map(.key = $head[.key]) |[ .[:2][], { key: "DATA", value: (.[2:] | from_entries) } ] |from_entries'> /tmp/zabbix/logs.json
 
 #echo
 #chown zabbix:zabbix /tmp/zabbix
@@ -32,14 +32,15 @@ with open('/tmp/zabbix/logs.json', 'r') as f:
 		#print(cont)
 		contlogs=json.loads(cont)
 		id=contlogs["CONTAINER"]
-		#print(id)
+		name=contlogs["IMAGE"]
+		print("Container Name :"+ name)
 
 
-		docker_logs="docker logs "+ id +" | grep Error "" >> /tmp/zabbix/"+id+"-error.txt"
+		docker_logs="docker logs "+ id +" | grep -E 'Error|Failed' "" > /tmp/zabbix/"+id+"-error.txt"
 		os.system(docker_logs)
 
 
-		file1 = open("/tmp/zabbix/"+id+"-error.txt",'r+')
+		file1 = open('/tmp/zabbix/'+ id +'-error.txt')
 		print(file1.read())
 		
 
